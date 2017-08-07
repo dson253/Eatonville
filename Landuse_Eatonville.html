@@ -2,26 +2,135 @@
 <html>
   <head>
     <meta charset='utf-8' />
-    <title>Eatonville's Exisiting Landuse</title>
+    <title>Eatonville's Existing Land use Data</title>
+
+     <head>
+
+<link href="scripts/basic.css" rel="stylesheet"><style>
+div.container {
+    width: 100%;
+    border: 1px solid gray;
+}
+
+header, footer {
+    padding: 1em;
+    color: white;
+    background-color: green;
+    clear: left;
+    text-align: center;
+}
+ul {
+    list-style-type: none;
+    float: left;
+    margin: 1;
+    padding: 0;
+    width: 190px;
+    background-color: #f1f1f1;
+}
+
+li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+article {
+    margin-left: 210px;
+    border-left: 1px solid gray;
+    padding: 1em;
+    overflow: hidden;
+}
+</style>
+</head>
+
+
+<body>
+
+
+  <header>
+   <h1>MapBox Studio - Existing Land use</h1>
+</header>
+
+   <ul>
+  <li><a class="active" href="MapWebsite.html">Home</a></li>
+  <li><a href="Map2_Landuse.html">ESRI AGOL Land use</a></li>
+  <li><a href="Landuse_Eatonville.html">MapBox Land use</a></li>
+  <li><a href="Map2_Parcels.html">ESRI AGOL Parcels</a></li>
+  <li><a href="Parcel_Eatonville.html">MapBox Parcels</a></li>
+</ul>
+    <article>
+    
+    <h3><p> Please click on the link for each map and interact with all features of the map before taking the <a href="https://goo.gl/forms/MuhKzYC4UMlq4dSm1" target="_blank">survey</a>. Your participation will help in this assessment and your time is much appreciated. You may stop at any point in this assessment.</p></h3>
+    <h3>Can you do the following tasks?:</h3>
+  <ol>
+  <li>Zoom in and out </li>
+  <li>Select point or polygon - Did the popup appear?</li>
+  <li>Search by address: </li>
+  <ul style="list-style-type:square">
+  <li>249 Easton Ave W, Eatonville</li>
+  <li>840 Two Creeks Rd N, Eatonville</li>
+  </ul>
+
+</article>
+</head>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.31.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.31.0/mapbox-gl.css' rel='stylesheet' />
+
     <style>
+
       body {
         margin: 0;
-        padding: 0;
+        padding: 1em;
       }
 
       #map {
         position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
+        top: 410px;
+        height: 800px;
+        left: 235px; 
+        bottom: 10px;
+        width: 80%;
+        overflow: scroll;
+
       }
+
     </style>
-  </head>
-  <body>
-    <div id='map'></div>
+    <body>
+       <style type='text/css'>
+    #info {
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 30%;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #222;
+        background: #fff;
+    }
+</style>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-supported/v1.2.0/mapbox-gl-supported.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.0/mapbox-gl-draw.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.1.0/mapbox-gl-geocoder.css' type='text/css' />
+<div id='map'></div>
+<pre id='info'></pre>
+
+
     <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiZHNvbjI1MyIsImEiOiJjaXVvcXhrZHkwMXRiMnpxbTVudW4yaWppIn0.qLzrjDj9POUOYDBmNEjSWA'; // replace this with your access token
     var map = new mapboxgl.Map({
@@ -31,10 +140,10 @@
     // code from the next step will go here
 
 
-
     map.on('click', function(e) {
   var features = map.queryRenderedFeatures(e.point, {
     layers: ['landuse1'] // replace this with the name of the layer
+
   });
 
   if (!features.length) {
@@ -45,19 +154,55 @@
 
   var popup = new mapboxgl.Popup({closeOnClick: false })
     .setLngLat(feature.geometry.coordinates)
-    .setHTML('<h3>' + feature.properties.TAX_PARCEL + '</h3><p>' + feature.properties.COND_DEF + '</p>')
+    .setHTML('<p>' + 'Tax Parcel: ' + feature.properties.TAX_PARCEL + '</p> <p>' + 'Type: ' + feature.properties.COND_DEF + '</p>')
     .setLngLat(feature.geometry.coordinates)
     .addTo(map);
 });
 
-
+map.addControl(new MapboxGeocoder({
+    accessToken: 'pk.eyJ1IjoiZHNvbjI1MyIsImEiOiJjaXVvcXhrZHkwMXRiMnpxbTVudW4yaWppIn0.qLzrjDj9POUOYDBmNEjSWA'
+}));
 
 map.addControl(new mapboxgl.NavigationControl());
 
+
+map.on('load', function() {
+    map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 2,
+        'paint': {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': {
+                'type': 'identity',
+                'property': 'height'
+            },
+            'fill-extrusion-base': {
+                'type': 'identity',
+                'property': 'min_height'
+            },
+            'fill-extrusion-opacity': .8
+        }
+    });
+});
+
+map.on('mousemove', function (e) {
+    document.getElementById('info').innerHTML =
+        // e.point is the x, y coordinates of the mousemove event relative
+        // to the top-left corner of the map
+        JSON.stringify(e.point) + '<br />' +
+        // e.lngLat is the longitude, latitude geographical position of the event
+        JSON.stringify(e.lngLat);
+});
+
+
     </script>
+
   </body>
 </html>
-
 
 
 
